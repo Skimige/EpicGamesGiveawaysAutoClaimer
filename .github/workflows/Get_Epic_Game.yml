@@ -2,15 +2,23 @@ name: Get Epic Game
 
 on:
   schedule: # 删除本行开头的 # 号
-    - cron: "5 15 * * *" # 删除本行开头的 # 号
+    - cron: "25 10 * * *" # 删除本行开头的 # 号
   push:
     branches:
       - master
+env:
+  TZ: Asia/Shanghai
 
 jobs:
   MainWork:
     runs-on: ubuntu-latest
     steps:      
+      - name: Set Timezone to UTC+8
+        env: 
+            DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo timedatectl set-timezone "$TZ"
+          
       - name: Clone Workflow Repository
         uses: actions/checkout@v2
 
@@ -59,7 +67,7 @@ jobs:
       #   if: always()
       #   uses: appleboy/telegram-action@master
       #   with:
-      #     to: "Chat ID"
-      #     token: "TelegramBot 的 Token"
+      #     to: ${{ secrets.TELEGRAM_TO }}
+      #     token: ${{ secrets.TELEGRAM_TOKEN }}
       #     format: markdown
       #     message_file: workdir/games.info
