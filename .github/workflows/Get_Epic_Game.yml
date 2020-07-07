@@ -2,7 +2,7 @@ name: Get Epic Game
 
 on:
   schedule: # 删除本行开头的 # 号
-    - cron: "23 23 * * *" # 删除本行开头的 # 号
+    - cron: "23 45 * * *" # 删除本行开头的 # 号
   watch:
     types: started
   push:
