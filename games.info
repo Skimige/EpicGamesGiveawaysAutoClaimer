@@ -260,3 +260,7 @@
  2020-07-28 | 07:46:23.649 | INFO  | Next Up Hero 已经领取
  2020-07-28 | 07:46:24.988 | INFO  | Tacoma 已经领取
 
+2020-07-29 07:46:45+08:00
+ 2020-07-29 | 07:46:43.344 | WARN  | Failed to claim Next Up Hero (Error: errors.com.epicgames.purchase.purchase.captcha.challenge)
+ 2020-07-29 | 07:46:45.029 | WARN  | Failed to claim Tacoma (Error: errors.com.epicgames.purchase.purchase.captcha.challenge)
+
