@@ -38,8 +38,8 @@ jobs:
         run: |
           cd workdir
           mkdir -p .egstore
-          yarn
-          yarn start ${{ secrets.EMAIL }} ${{ secrets.PASSWD }} 0 ${{ secrets.SECRET }} > games.info
+          npm install
+          npm start ${{ secrets.EMAIL }} ${{ secrets.PASSWD }} 0 ${{ secrets.SECRET }} > games.info
 
       - name: Edit Games.info
         if: always()
