@@ -20,7 +20,10 @@ jobs:
             DEBIAN_FRONTEND: noninteractive
         run: |
           sudo timedatectl set-timezone "$TZ"
-          
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+
       - name: Clone Workflow Repository
         uses: actions/checkout@v2
 
@@ -50,18 +53,18 @@ jobs:
           cat games.info >> ../games.info
           echo >> ../games.info
 
-      - name: Commit Files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit -m ":package: 领取游戏"
+      # - name: Commit Files
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+      #     git add .
+      #     git commit -m ":package: 领取游戏"
 
       # 此处的 ${{ secrets.GITHUB_TOKEN }} 是 Actions 自有变量，不用管
-      - name: GitHub Push
-        uses: ad-m/github-push-action@v0.5.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: GitHub Push
+      #   uses: ad-m/github-push-action@v0.5.0
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # 如果需要推送到 Telegram 用来提示，取消注释以下内容
       # 这部分的内容可以查看 https://www.github.com/appleboy/telegram-action
