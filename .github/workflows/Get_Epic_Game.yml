@@ -2,7 +2,7 @@ name: Get Epic Game
 
 on:
   schedule: # 删除本行开头的 # 号
-    - cron: "45 23 * * *" # 删除本行开头的 # 号
+    - cron: "45 15 * * *" # 删除本行开头的 # 号
   watch:
     types: started
   push:
@@ -38,7 +38,8 @@ jobs:
         run: |
           cd workdir
           mkdir -p .egstore
-          npm install
+          yarn
+          sed -i 's/headless: false/headless: true/' node_modules/epicgames-client-login-adapter/index.js
           npm start ${{ secrets.EMAIL }} ${{ secrets.PASSWD }} 0 ${{ secrets.SECRET }} > games.info
 
       - name: Edit Games.info
