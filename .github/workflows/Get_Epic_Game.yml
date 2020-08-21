@@ -13,13 +13,13 @@ env:
 
 jobs:
   MainWork:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:      
-#       - name: Set Timezone to UTC+8
-#         env: 
-#             DEBIAN_FRONTEND: noninteractive
-#         run: |
-#           sudo timedatectl set-timezone "$TZ"
+      - name: Set Timezone to UTC+8
+        env: 
+            DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo timedatectl set-timezone "$TZ"
 
       - name: Setup Node.js
         uses: actions/setup-node@v1
@@ -39,7 +39,7 @@ jobs:
           cd workdir
           mkdir -p .egstore
           yarn
-          sed -i "" 's/headless: false/headless: true/' node_modules/epicgames-client-login-adapter/index.js
+          sed -i 's/headless: false/headless: true/' node_modules/epicgames-client-login-adapter/index.js
           npm start ${{ secrets.EMAIL }} ${{ secrets.PASSWD }} 0 ${{ secrets.SECRET }} > games.info
 
       - name: Edit Games.info
