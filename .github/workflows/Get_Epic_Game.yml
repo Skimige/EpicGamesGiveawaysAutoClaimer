@@ -15,11 +15,11 @@ jobs:
   MainWork:
     runs-on: macos-latest
     steps:      
-      - name: Set Timezone to UTC+8
-        env: 
-            DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo timedatectl set-timezone "$TZ"
+#       - name: Set Timezone to UTC+8
+#         env: 
+#             DEBIAN_FRONTEND: noninteractive
+#         run: |
+#           sudo timedatectl set-timezone "$TZ"
 
       - name: Setup Node.js
         uses: actions/setup-node@v1
