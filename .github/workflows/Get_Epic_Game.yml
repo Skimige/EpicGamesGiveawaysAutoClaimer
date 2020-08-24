@@ -77,3 +77,69 @@ jobs:
            token: ${{ secrets.TELEGRAM_TOKEN }}
            format: markdown
            message_file: workdir/games.info
+
+  MacOS:
+    runs-on: macos-latest
+    steps:      
+#       - name: Set Timezone to UTC+8
+#         env: 
+#             DEBIAN_FRONTEND: noninteractive
+#         run: |
+#           sudo timedatectl set-timezone "$TZ"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+
+      - name: Clone Workflow Repository
+        uses: actions/checkout@v2
+
+      - name: Clone Claimer Repository
+        uses: actions/checkout@v2
+        with:
+          repository: Revadike/epicgames-freebies-claimer
+          path: workdir
+
+      # 在 'Settings' - 'Secrets' 添加 EMAIL (你的 Epic 邮箱)，PASSWD (你的 Epic 密码)，SECRET（二步验证 Secret）
+      - name: Get Gifts
+        run: |
+          cd workdir
+          mkdir -p .egstore
+          yarn
+          sed -i "" 's/headless: false/headless: true/' node_modules/epicgames-client-login-adapter/index.js
+          npm start ${{ secrets.EMAIL }} ${{ secrets.PASSWD }} 0 ${{ secrets.SECRET }} > games.info
+
+      - name: Edit Games.info
+        if: always()
+        run: |
+          cd workdir
+          sed -i '1d' games.info
+          sed -i 's/Successfully claimed/成功领取/' games.info
+          sed -i 's/was already claimed for this account/已经领取/' games.info
+          sed -i '$d' games.info
+          date --rfc-3339=seconds >> ../games.info
+          cat games.info >> ../games.info
+          echo >> ../games.info
+
+      # - name: Commit Files
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+      #     git add .
+      #     git commit -m ":package: 领取游戏"
+
+      # 此处的 ${{ secrets.GITHUB_TOKEN }} 是 Actions 自有变量，不用管
+      # - name: GitHub Push
+      #   uses: ad-m/github-push-action@v0.5.0
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 如果需要推送到 Telegram 用来提示，取消注释以下内容
+      # 这部分的内容可以查看 https://www.github.com/appleboy/telegram-action
+      - name: Send to me via Telegram
+        if: always()
+        env:
+          CHAT_ID: ${{ secrets.TELEGRAM_TO }}
+          BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: |
+          export name="workdir/games.info"
+          curl https://api.telegram.org/bot${BOT_TOKEN}/sendDocument -X POST -F chat_id="$CHAT_ID" -F caption="$GITHUB_SHA" -F document="@$name" > telegram.log
